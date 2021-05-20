@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import values from 'lodash/values';
 import PropTypes from 'prop-types';
 import TreeNode from './TreeNode';
-import { render } from '@testing-library/react';
-
 
 const data = {
   '/root': {
@@ -44,18 +42,52 @@ const data = {
   },
 };
 
-export default function Tree() {
+export default class Tree extends Component {
+  state = {
+    nodes: data,
+  };
 
-  
+  // gets top level root node in tree data
+  getRootNodes = () => {
+    const {nodes} = this.state;
+    return values(nodes).filter((node) => node.isRoot === true);
+  };
 
+  // reads children property, map with tree data to return an array of children objects
+  getChildNodes = (node) => {
+    const {nodes} = this.state;
+    if (!node.children) return [];
+    return node.children.map((path) => nodes[path]);
+  };
 
+  onToggle = (node) => {
+    const {nodes} = this.state;
+    nodes[node.path].isOpen = !node.isOpen;
+    this.setState({nodes});
+  };
+
+  onNodeSelect = (node) => {
+    const {onSelect} = this.props;
+    onSelect(node);
+  };
 
   render() {
-
-      return (
-        <div>
-        
+    const rootNodes = this.getRootNodes();
+    return (
+      <div>
+        {rootNodes.map((node) => (
+          <TreeNode
+            node={node}
+            getChildNodes={this.getChildNodes}
+            onToggle={this.onToggle}
+            onNodeSelect={this.onNodeSelect}
+          />
+        ))}
       </div>
-    )
+    );
   }
 }
+
+Tree.propTypes = {
+  onSelect: PropTypes.func.isRequired,
+};
