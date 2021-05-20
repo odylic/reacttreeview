@@ -105,6 +105,6 @@ export default class Tree extends Component {
 }
 
 Tree.propTypes = {
-  // prop-types enforces good coding style
+  // prop-types enforces good coding style like typescript for props
   onSelect: PropTypes.func.isRequired,
 };
