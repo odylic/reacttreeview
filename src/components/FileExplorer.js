@@ -15,19 +15,24 @@ const TreeWrapper = styled.div`
 
 export default class FileExplorer extends Component {
   state = {
+    // initial state is null
     selectedFile: null,
   };
 
+  // function for click, selectedFile will setState to the file
   onSelect = (file) => this.setState({selectedFile: file});
 
   render() {
+    // sets selectedFile variable to state
     const {selectedFile} = this.state;
     return (
       <StyledFileExplorer>
         <TreeWrapper>
+          {/* uses the function to state's function */}
           <Tree onSelect={this.onSelect} />
         </TreeWrapper>
         <div>
+          {/* passes down the path, type and children */}
           {selectedFile && selectedFile.type === 'file && selectedFile.content'}
         </div>
       </StyledFileExplorer>
